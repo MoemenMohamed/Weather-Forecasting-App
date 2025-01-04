@@ -9,15 +9,20 @@ class ForecastTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
       width: 120,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image(image: NetworkImage("https:${modelData.conditionIcon}")),
-          Text(modelData.conditionText,style: TextStyle(fontWeight: FontWeight.bold),),
+          Text(
+            modelData.conditionText,
+            style: TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
           Text("${modelData.maxTemp}°/${modelData.minTemp}°"),
           Text(modelData.forecastDate),
-          
         ],
       ),
     );
