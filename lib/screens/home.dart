@@ -1,44 +1,22 @@
 import 'package:flutter/material.dart';
 import '../models/weather_model.dart';
-import '../services/get_weather_data.dart';
+import 'package:provider/provider.dart';
+import '../providers/weather_model_provider.dart';
 import '../widgets/forecast_tile.dart';
 
-class HomePage extends StatefulWidget {
-  final String cityName;
-  const HomePage({super.key, required this.cityName});
+class HomePage extends StatelessWidget {
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  WeatherModel? weatherDetails;
-
-  @override
-  void initState() {
-    super.initState();
-    getData(widget.cityName);
-  }
-
-  void getData(String name) async {
-    weatherDetails = await GetWeatherData().getWeatherData(name);
-    setState(() {});
-  }
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (weatherDetails != null) {
+    var weather = Provider.of<WeatherData>(context);
+    var weatherDetails = weather.weatherData;
+    if (!weather.isLoading) {
       return Scaffold(
         appBar: AppBar(
           title: Text("My Weather"),
           backgroundColor: Colors.lightBlueAccent.shade100,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  getData(widget.cityName);
-                },
-                icon: Icon(Icons.refresh))
-          ],
         ),
         body: Container(
           color: Colors.lightBlueAccent.shade100,
@@ -68,7 +46,8 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Wind Speed:  ",style: TextStyle(fontWeight: FontWeight.bold),
+                    "Wind Speed:  ",
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text("${weatherDetails!.windSpeedKph} kph")
                 ],
@@ -83,16 +62,23 @@ class _HomePageState extends State<HomePage> {
                   Text(weatherDetails!.lastUpdated)
                 ],
               ),
-              SizedBox(height: 30,),
+              SizedBox(
+                height: 30,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                ForecastTile(modelData: weatherDetails!.forecastedData[0]),
-                SizedBox(width: 10,),
-                ForecastTile(modelData: weatherDetails!.forecastedData[1]),
-                SizedBox(width: 10,),
-                ForecastTile(modelData: weatherDetails!.forecastedData[2]),
-              ],)
+                  ForecastTile(modelData: weatherDetails!.forecastedData[0]),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  ForecastTile(modelData: weatherDetails!.forecastedData[1]),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  ForecastTile(modelData: weatherDetails!.forecastedData[2]),
+                ],
+              )
             ],
           ),
         ),

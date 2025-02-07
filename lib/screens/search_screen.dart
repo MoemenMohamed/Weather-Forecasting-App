@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import '../providers/weather_model_provider.dart';
 import 'home.dart';
 
 List<String> list = [
-  "Abu Dhabi",
-  "Addis Ababa",
-  "Algiers",
-  "Amman",
-  "Amsterdam",
-  "Athens",
-  "Baghdad",
   "Bangkok",
   "Beijing",
   "Beirut",
@@ -21,41 +15,6 @@ List<String> list = [
   "Chicago",
   "Delhi",
   "Doha",
-  "Dubai",
-  "Jeddah",
-  "Johannesburg",
-  "Jakarta",
-  "Kuala Lumpur",
-  "Khartoum",
-  "Lagos",
-  "Lisbon",
-  "London",
-  "Los Angeles",
-  "Madrid",
-  "Marrakech",
-  "Melbourne",
-  "Mexico City",
-  "Miami",
-  "Mumbai",
-  "Muscat",
-  "Nairobi",
-  "New York",
-  "Paris",
-  "Prague",
-  "Rio de Janeiro",
-  "Riyadh",
-  "Rome",
-  "São Paulo",
-  "Seoul",
-  "Shanghai",
-  "Singapore",
-  "Sydney",
-  "Tokyo",
-  "Toronto",
-  "Tripoli",
-  "Tunis",
-  "Vancouver",
-  "Vienna"
 ];
 
 class SearchScreen extends StatefulWidget {
@@ -79,27 +38,24 @@ class _SearchScreenState extends State<SearchScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
-              child: Container(
-                margin: EdgeInsets.all(10),
-                width: 210,
-                child: DropdownButton<String>(
-                  underline: SizedBox(),
-                  items: list.map<DropdownMenuItem<String>>((value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return HomePage(cityName: value!,);
-                    }));
-                  },
-                  hint: Text(
-                    "Select a city",
-                    style: TextStyle(fontSize: 30),
-                  ),
+              child: DropdownButton<String>(
+                underline: SizedBox(),
+                items: list.map<DropdownMenuItem<String>>((value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    Provider.of<WeatherData>(context).setData(value!);
+                    return HomePage();
+                  }));
+                },
+                hint: Text(
+                  "Select a city",
+                  style: TextStyle(fontSize: 30),
                 ),
               ),
             )
